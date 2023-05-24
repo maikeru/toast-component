@@ -39,12 +39,15 @@ function ToastPlayground() {
     );
   }
 
-  function handleSubmit() {
+  function handleSubmit(event) {
+    event.preventDefault();
     setToasts((current) => [...current, { id: getNextId(), message, variant }]);
+    setMessage("");
+    setVariant("notice");
   }
 
   return (
-    <div className={styles.wrapper}>
+    <form className={styles.wrapper} onSubmit={handleSubmit}>
       <header>
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
@@ -70,7 +73,7 @@ function ToastPlayground() {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 }
 
