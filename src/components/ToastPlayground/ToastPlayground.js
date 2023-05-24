@@ -4,8 +4,18 @@ import Button from "../Button";
 import Toast from "../Toast";
 
 import styles from "./ToastPlayground.module.css";
+import ToastShelf from "../ToastShelf/ToastShelf";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
+
+function useNextId() {
+  const [id, setId] = useState(0);
+  return () => {
+    const nextId = id;
+    setId(id + 1);
+    return nextId;
+  };
+}
 
 function ToastPlayground() {
   const [message, setMessage] = useState("");
@@ -20,13 +30,17 @@ function ToastPlayground() {
     setVariant(event.target.value);
   }
 
-  const [isToastVisible, setIsToastVisible] = useState(false);
-  function handleToastDismiss() {
-    setIsToastVisible(false);
+  const getNextId = useNextId();
+
+  const [toasts, setToasts] = useState([]);
+  function handleToastDismiss(id) {
+    setToasts((currentToasts) =>
+      currentToasts.filter((currToast) => currToast.id !== id)
+    );
   }
 
   function handleSubmit() {
-    setIsToastVisible(true);
+    setToasts((current) => [...current, { id: getNextId(), message, variant }]);
   }
 
   return (
@@ -36,13 +50,7 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      {isToastVisible && (
-        <Toast
-          variant={variant}
-          message={message}
-          onDismiss={handleToastDismiss}
-        />
-      )}
+      <ToastShelf toasts={toasts} handleToastDismiss={handleToastDismiss} />
 
       <div className={styles.controlsWrapper}>
         <MessageInput
