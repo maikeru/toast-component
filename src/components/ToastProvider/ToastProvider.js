@@ -1,22 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 
 export const ToastContext = React.createContext();
 
 function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
 
-  function addToast(id, message, variant) {
+  const addToast = useCallback((id, message, variant) => {
     setToasts((current) => [...current, { id, message, variant }]);
-  }
+  }, []);
 
-  function removeToast(id) {
+  const removeToast = useCallback((id) => {
     setToasts((currentToasts) =>
       currentToasts.filter((currToast) => currToast.id !== id)
     );
-  }
+  }, []);
+
+  const removeAllToasts = useCallback(() => {
+    setToasts([]);
+  }, []);
 
   return (
-    <ToastContext.Provider value={{ toasts, addToast, removeToast }}>
+    <ToastContext.Provider
+      value={{ toasts, addToast, removeToast, removeAllToasts }}
+    >
       {children}
     </ToastContext.Provider>
   );

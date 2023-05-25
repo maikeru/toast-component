@@ -18,10 +18,11 @@ const ICONS_BY_VARIANT = {
   error: AlertOctagon,
 };
 
-function Toast({ variant, children, onDismiss }) {
+function Toast({ id, variant, children, onDismiss }) {
   const Icon = ICONS_BY_VARIANT[variant] ?? Info;
+
   return (
-    <div className={`${styles.toast} ${styles[variant]}`}>
+    <div id={id} className={`${styles.toast} ${styles[variant]}`}>
       <div className={styles.iconContainer}>
         <Icon size={24} />
       </div>
@@ -34,4 +35,4 @@ function Toast({ variant, children, onDismiss }) {
   );
 }
 
-export default Toast;
+export default React.memo(Toast);
