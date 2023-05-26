@@ -1,9 +1,17 @@
 import { useEffect } from "react";
 
-export function useEscapeKey(callback) {
+/**
+ * Enum of valid keys
+ */
+const keys = {
+  Escape: "Escape",
+  // etc
+};
+
+export function useKey(key, callback) {
   useEffect(() => {
     function handleKeyDown(event) {
-      if (event.key !== "Escape") return;
+      if (event.key !== key) return;
 
       callback();
     }
@@ -12,5 +20,9 @@ export function useEscapeKey(callback) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [callback]);
+  }, [callback, key]);
+}
+
+export function useEscapeKey(callback) {
+  useKey(keys.Escape, callback);
 }
